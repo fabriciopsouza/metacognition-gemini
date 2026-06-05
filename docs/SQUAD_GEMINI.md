@@ -1,30 +1,20 @@
-# SQUAD GEMINI: Roteamento de Projetos e Validação Adversarial
-*Documentação de Operação Multi-agente v1.0.0-gemini (Herdada e escalada da Camada 2 do Metacognition Original v2.2.0)*
+## 2. Matriz Estrita de Papéis (A Inovação do QA Adversarial)
 
-Este documento estabelece as regras para o **Modo Squad Nativo** no ecossistema Gemini. Enquanto no framework original os papéis de *Squad* eram virtuais, nesta edição eles se tornam restrições sistêmicas para contornar a sicofância e a prosa nativa.
+No repositório original (v2.2.0), o *Squad* era invocado por pastas `.agent/skills/`. Restauramos essa mesma engenharia aqui para garantir paridade absoluta. O Gemini **tem o dever de procurar** os descritores e "vestir o chapéu" correto dependendo do comando enviado pelo usuário.
 
-## 1. O Problema da Prosa e a Solução Nativa
+### A Tabela de Skills de Orquestração (Obrigatória)
 
-Para evitar que o Gemini ative o "viés de agradar" comum em chats, o Modo Squad abandona a dependência de "pedidos descritivos" e foca em **Gatilhos Estruturados**:
+| Skill (Chapéu) | Gatilho | Responsabilidade (Sem Prosa) |
+| --- | --- | --- |
+| **PMO** | `/start-session` | Analisar escopo geral, checar artefatos (`briefing.md`, `ADRs`) e planejar. Nunca escreve código. |
+| **Architect** | `/feature-plan` | Define contratos de APIs, banco de dados. Gera o `implementation_plan.md`. |
+| **Developer** | `/implement` | Aplica Camada 1 (`GEMINI-FRAMEWORK.md`). Gera os *diffs* cirúrgicos e usa *Ownership* (parada de bloqueio em erro). |
+| **DocOps** | Automático | Atualiza README, CHANGELOG e gera `walkthrough.md`. |
+| **SAP Specialist** | `/sap-change` | Força a validação de tabelas transparentes e regras ABAP rigorosas. |
+| **BI Analyst** | `/bi-deliverable` | Valida agregações vs dimensões, foca em visualizações (Tableau/PowerBI) com Zero Placeholders e Reconciliação Matemática. |
 
-- Todo pedido usa ferramentas (`view_file`, `list_dir`) ao invés de suposições.
-- A comunicação entre usuário e agente se dá pela edição de artefatos de plano e tarefas.
-
-## 2. Separação Estrita de Papéis (A Inovação do QA Adversarial)
-
-No repositório original (v2.2.0), o *QA-Critic* era um chapéu cognitivo do LLM. Aqui, exigimos a divisão obrigatória e física entre Criação e Validação.
-
-### Papel 1: O Agente Desenvolvedor (Criador)
-- **Regra Base:** O mesmo modelo do framework original (*File-First*, *Anti-Rename*). Aplica a Camada 1 (`GEMINI-FRAMEWORK.md`) estritamente.
-
-### Papel 2: O Agente QA Critic (Adversarial)
-- **Função Obrigatória:** O QA **DEVE** rodar em um modelo de IA separado do Desenvolvedor.
-- **Implementação:** Se o Dev rodou em `Gemini Advanced`, o QA deve rodar em `Gemini Flash`.
-- **Comportamento:** O QA não pode escrever código de features; ele só rejeita ou aprova diffs puramente com base em matemática e *edge cases*.
-
-## 3. Workflow de Execução Direta
-
-Conforme o original de Claude v2.2.0, o fluxo de projeto em múltiplas etapas segue o ciclo de:
-1. Plano via artefato aprovado.
-2. Implementação com *Ownership* (parada de bloqueio se houver erro).
-3. QA Adversarial de modelo distinto valida o artefato de *Walkthrough* gerado pelo Dev.
+### O Papel Exclusivo e Isolado: Agente QA Critic (Adversarial)
+Aqui o Gemini Edition se diferencia do original: **O QA não pode ser ativado na mesma sessão ou pelo mesmo modelo.**
+- **Função Obrigatória:** O QA **DEVE** rodar em um modelo separado do Desenvolvedor.
+- **Implementação:** Ex: Dev roda em `Gemini Advanced`, QA em `Gemini Flash` (ou integrado com Claude).
+- **Comportamento:** O QA não pode escrever código de features; ele ataca a premissa puramente com base em matemática, *edge cases* e regras de *Logging*.

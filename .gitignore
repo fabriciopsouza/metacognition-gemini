@@ -1,0 +1,20 @@
+# Segurança
+.env
+
+# Diretórios de Agentes Genéricos (se houver caches temporários)
+.agent/scratch/.env
+.env.*
+!.env.example
+
+# Bloqueio de Vazamento de Dados (Execution Reports)
+execution-reports/
+!execution-reports/00-template.md
+
+# Protocolo Cross-AI (Local State)
+output/processed.json
+.agent/cross-ai-repos.json
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
