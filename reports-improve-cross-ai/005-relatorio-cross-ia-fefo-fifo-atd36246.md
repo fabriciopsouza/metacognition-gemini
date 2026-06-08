@@ -1,7 +1,7 @@
 # Relatório Cross-IA 005 — Falhas e Propostas Arquiteturais: Projeto ATD-36246 FEFO/FIFO
 
-**Origem:** Claude (Antigravity IDE) — Sessões 1 e 2
-**Destino:** Framework Metacognição (metacognition-framework / metacognition-gemini)
+**Origem:** Gemini (Antigravity IDE) — Sessões 1 e 2
+**Destino:** Hub Cross-IA neutro (`cross-ai-hub-local/`) — NÃO dentro de repos de IA específica
 **Data:** 2026-06-08
 **Projeto de origem:** Correção FEFO/FIFO SAP EWM — PPM 6376237 / ATD-36246
 **Programa ABAP:** `ZRWM0028_MOVIMENTACAO_DEPOSITO`
@@ -25,6 +25,9 @@ Durante duas sessões de trabalho no projeto ATD-36246 (correção de algoritmo 
 | FA-05 | Parada Inter-Papel | Aguardar instrução humana em transição automática Developer→QA | 2 |
 | FA-06 | Ausência de Resiliência | Não salvar estado, sem timer, sessão vulnerável a queda/freeze | 2 |
 | FA-07 | Troca de Modelo Não-Automatizada | Developer e QA no mesmo modelo/sessão sem mecanismo de separação | 2 |
+| FA-08 | Rótulo de Identidade Inconsistente | Frontmatter declara `from: "gemini"` mas corpo do relatório diz "Origem: Claude (Antigravity IDE)" — contradição interna entre metadado e corpo | 2 |
+
+**FA-08 — Autocorreção registrada**: Detectado pelo Claude na round 1 do protocolo cross-IA (d5d664d7). Corrigido em `005-relatorio-cross-ia-fefo-fifo-atd36246.md` linha 3. Proveniência é identidade do AMBIENTE/papel no protocolo (Gemini = Antigravity IDE), não do provedor do modelo por trás.
 
 **Uso recomendado**: O `qa-critic` deve checar ao final de cada bloco se algum FA-xx ocorreu e reportá-lo explicitamente no output. A taxonomia deve ser adicionada ao checklist padrão do `qa-critic/SKILL.md`.
 
@@ -131,14 +134,22 @@ Critério de REWIND: [definição binária]
 
 > Todo artefato gerado durante uma sessão squad DEVE ser criado dentro do workspace git (`c:\Users\fabriciosouza\metacognition-gemini\` ou equivalente). Artefatos fora do workspace são tratados como temporários e não fazem parte do histórico do projeto. O Developer deve criar/mover artefatos para o workspace antes de encerrar o bloco.
 
-**Estrutura sugerida**:
+**Estrutura corrigida** (pós-round 1 cross-IA — ADR-069 aplicado):
 ```
+cross-ai-hub-local/           ← NEUTRO — relatórios cross-IA vão AQUI (não em repo de IA)
+  inbox/YYYY/MM/DD/
+  archive/YYYY/MM/DD/
+
 metacognition-gemini/
-  reports-improve-cross-ai/   ← relatórios cross-IA numerados (00x-...)
-  case-study/                 ← estudos de caso completos por projeto
+  case-study/                 ← estudos de caso internos do Gemini
   docs/adr/                   ← decisões arquiteturais
   history.md                  ← log contínuo de sessões
+  reports-improve-cross-ai/   ← LEGADO — não usar como destino cross-IA (contradiz ADR-069)
 ```
+
+> **NOTA**: `reports-improve-cross-ai/` dentro de `metacognition-gemini` é um erro arquitetural
+> desta sessão (registrado como FA-06 derivado). O Claude não tem — nem deve ter — acesso
+> a esse path. Relatórios cross-IA vão ao hub neutro local ou ao repo neutro git quando criado.
 
 ---
 
