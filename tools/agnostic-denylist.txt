@@ -1,0 +1,43 @@
+# tools/agnostic-denylist.txt — ruleset do linter de agnosticismo do núcleo (ADR-020).
+#
+# NÃO é conhecimento de domínio do núcleo: é a negativa (o que o NÚCLEO operativo não pode
+# carregar hardcoded). Vive em tools/ (infra, como o ruleset de um linter) — por isso este
+# arquivo NÃO é varrido por check_core_agnostic.py e não viola o Princípio 12.
+#
+# Formato: uma REGEX por linha (Python `re`, IGNORECASE). Linhas em branco / iniciadas por # são ignoradas.
+# Cada padrão deve casar um IDENTIFICADOR DE NORMA/CONVENÇÃO REGULATÓRIA DE DOMÍNIO específico.
+#
+# LIMITE HONESTO (ADR-020 §Riscos): esta lista é NÃO-EXAUSTIVA por design — surgem normas novas
+# (o dono lembrou: "...que são exemplos, podem existir OUTROS"). O linter REDUZ, não ELIMINA, o
+# vazamento; a regra #5 do qa-critic (semântica) continua sendo o backstop. Editar é esperado.
+#
+# Seed: normas que JÁ vazaram para o núcleo (history.md ## Aprendizado 2026-05-29/30) + comuns.
+
+\bALCOA(?:\+|\b)
+\bANVISA\b
+\bANP\b
+\bFDA\b
+\bBACEN\b
+\bGAMP\b
+\bHIPAA\b
+\bLGPD\b
+\bGDPR\b
+\bGxP\b
+21\s*CFR
+\bPCI-?DSS\b
+
+# Expansão v1.30.0 (ADR-043 — item 11 do plano de remediação v2): famílias reguladas comuns
+# que ainda passavam. NÃO-EXAUSTIVA por design (ver check_regulatory_coverage.py). NIST/OWASP são
+# padrões abertos FUNDACIONAIS do framework (guia/REFERENCIAS.md) — quando citados como FONTE de
+# princípio, portam o sentinela `lint-agnostic:allow` (caso real: _shared/action-safety §Princípio).
+\bSOX\b
+\bISO[ -]?13485\b
+\bISO[ -]?27001\b
+\bISO[ -]?9001\b
+\bCOBIT\b
+\bITIL\b
+\bBasel\s?(I{1,3}|IV)\b
+\bSOC ?2\b
+\bNIST\b
+\bCLIA\b
+\bSarbanes-?Oxley\b

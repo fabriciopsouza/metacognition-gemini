@@ -1,8 +1,13 @@
-# Glossário e Regras de Negócio
-# Arquivo base de governança do repositório local
+# Glossário do Projeto — SOURCE OF TRUTH
 
-Este arquivo garante que o Agente não invente termos de banco de dados ou regras matemáticas fora do contexto da sua empresa.
+Registro autorizado de nomes (campos, fórmulas, variáveis, termos).
+REGRA: antes de gerar qualquer código que mencione um termo, consultar aqui.
+Não existe → PARAR e adicionar antes de prosseguir.
 
-- **UsuarioId:** Usar UUID v4. Jamais INT.
-- **Status de Pagamento:** Somente `PENDING`, `PAID`, `FAILED`. Não invente `APPROVED`.
-- **Valores:** Sempre calculados com precisão de 2 casas decimais.
+## Termos cadastrados (preencher por projeto)
+### exemplo_termo
+- Tipo · Origem · Definição inequívoca · Unidade · Regra de negócio · Aprovado em.
+
+## Termos PROIBIDOS / DEPRECIADOS
+| Proibido | Substituto | Razão |
+|---|---|---|

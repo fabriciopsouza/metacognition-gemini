@@ -1,0 +1,6 @@
+{
+  "role": "master",
+  "canonical_remote": "https://github.com/fabriciopsouza/metacognition-gemini",
+  "canonical_branch": "main",
+  "stale_behind_threshold": 50
+}

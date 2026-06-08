@@ -18,3 +18,5 @@ output/processed.json
 .DS_Store
 Thumbs.db
 
+# Quarentena (Limitação de Ambiente da Sessão)
+metacognitive-team-gemini/

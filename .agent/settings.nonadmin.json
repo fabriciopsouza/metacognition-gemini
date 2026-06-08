@@ -1,0 +1,8 @@
+{
+  "nonadmin_mode": true,
+  "blocked_hooks": [
+    "effect-gate",
+    "route-gate"
+  ],
+  "advisory_mode": true
+}
