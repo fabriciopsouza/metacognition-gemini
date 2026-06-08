@@ -4,8 +4,10 @@ import shutil
 import re
 import sys
 
-ROOT_CLAUDE = r"C:\Users\zdvn\metacognition-framework"
-ROOT_GEMINI = r"c:\Users\zdvn\OneDrive - PUCRS - BR\_Meus Repositórios\metacognition-gemini"
+import os
+USER_HOME = os.environ.get("USERPROFILE", r"C:\Users\fabriciosouza")
+ROOT_CLAUDE = os.path.join(USER_HOME, "metacognition-framework")
+ROOT_GEMINI = os.path.join(USER_HOME, "metacognition-gemini")
 
 SYNC_TARGETS = [
     ".agent",

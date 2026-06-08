@@ -1,0 +1,123 @@
+FAIL(1)   test_adr_changelog_sync.py
+    | 72 ADR(s) Aceito; mencionadas no CHANGELOG: 0 — FAIL
+    |   - ADR-0002 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-002 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-003 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-004 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-005 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-006 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-007 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-009 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-010 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-011 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-012 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-013 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-014 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-015 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-016 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-017 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-018 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-019 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-020 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-021 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-022 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-023 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-024 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-025 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-026 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-027 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-028 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-029 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-030 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-033 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-034 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-035 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-036 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-037 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-038 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-039 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-040 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-041 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-042 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-043 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-044 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-045 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-046 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-047 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-048 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-049 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-050 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-051 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-052 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-053 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-054 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-055 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-056 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-057 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-058 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-059 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-060 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-061 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-062 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-063 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-064 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-065 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-066 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-067 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-068 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-069 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-070 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-071 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-072 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-073 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-074 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    |   - ADR-076 Aceito mas AUSENTE do CHANGELOG (doc-sync: registre a mudanca)
+    | --------------------------------------------------
+    | RESULTADO: FAIL (72 ADR sem doc-sync)
+PASS      test_capabilities.py
+PASS      test_clean_env.py
+FAIL(1)   test_compaction_gate.py
+    | OK   [allow->allow] history.md com checkpoint
+    | FAIL [block->allow] sem history.md (nada persistido)
+    | FAIL [block->allow] history.md sem checkpoint
+    | ----------------------------------------
+    | RESULTADO: FAIL (2 caso(s))
+PASS      test_completeness.py
+PASS      test_context_brief.py
+PASS      test_core_agnostic.py
+PASS      test_cross_ai_gate.py
+PASS      test_cross_ai_hub.py
+PASS      test_delivery_floor.py
+FAIL(1)   test_dev_dogfood.py
+    | master(docs/_private)=True; execution-reports=0; handoffs cross-IA=1 — FAIL
+    |   - MASTER sem execution-report (docs/_private/execution-report-*.md) — dogfood dev nao gerado
+    | --------------------------------------------------
+    | RESULTADO: FAIL (1 — dogfood dev exigido, nao opt-in)
+PASS      test_discovery_eval.py
+PASS      test_doc_intake.py
+FAIL(1)   test_effect_gate.py
+    | FAIL [deny ->allow] rm -rf /
+    | FAIL [deny ->allow] rm -rf ~/
+    | FAIL [deny ->allow] sudo rm -rf ~ (home)
+    | FAIL [deny ->allow] rm -fr /*
+    | FAIL [deny ->allow] rm -r -f / (flags soltas)
+    | FAIL [deny ->allow] rm --recursive --force / (flags longas)
+    | FAIL [deny ->allow] rm -rf "/" (aspas duplas)
+    | FAIL [deny ->allow] rm -rf '/' (aspas simples)
+    | FAIL [deny ->allow] /bin/rm -rf ~ (path absoluto)
+    | FAIL [deny ->allow] mkfs.ext4
+    | FAIL [deny ->allow] Format-Volume
+    | FAIL [deny ->allow] dd of=/dev/sda
+    | FAIL [ask  ->allow] find / -delete
+    | FAIL [ask  ->allow] find ~ -delete
+    | OK   [allow->allow] rm arquivo local
+    | OK   [allow->allow] rm -rf node_modules
+    | OK   [allow->allow] rm -r -f ./build (local)
+    | OK   [allow->allow] find . -delete (local)
+    | FAIL [deny ->allow] push --force main
+    | FAIL [deny ->allow] push -f
+    | OK   [allow->allow] push --force-with-lease
+    | OK   [allow->allow] push normal
+    | FAIL [ask  ->allow] git reset --hard
+    | FAIL [ask  ->allow] git clean -fdx
+    | FAIL [ask  ->allow] git clean -f -d (flags separadas)

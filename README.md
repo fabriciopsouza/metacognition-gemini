@@ -46,3 +46,9 @@ metacognition-gemini/
     ├── GETTING_STARTED_GEMINI.md  # Como usar no Antigravity e configurar o QA
     └── SQUAD_GEMINI.md            # Como gerenciar projetos complexos sem prosa
 ```
+
+
+[LIMITS](LIMITS.md)
+
+
+Versão: 1.52.0

@@ -260,3 +260,47 @@ Nenhum over-allocation, under-allocation ou risco de dump residual.
 Qualquer over-allocation comprovada ou lógica de abate incorreta identificada.
 ===
 ```
+
+---
+
+# Sessão 3 — QA-Critic (Revisão Adversarial)
+
+**Data**: 08 de Junho de 2026
+**Papel**: QA-Critic / Developer (Rewind e Correção)
+**Objetivo**: Validar o patch de refatoração multi-lote com base no Prompt Package gerado na Sessão 2.
+
+## 1. Execução do Checklist Adversarial
+
+O agente assumiu a postura adversarial de QA (hipótese default: existe bug) e aplicou o checklist C1-C10 no código atual do arquivo `ZRWM0028_MOVIMENTACAO_DEPOSITO 1.txt`.
+
+**Resultados Preliminares:**
+- C1 (Single-lote, single-linha): **[CONFIRMADO]** - Comportamento idêntico, a guarda `v_last_material` opera perfeitamente.
+- C2 (FEFO + FIFO): **[CONFIRMADO]** - O `SORT t_aqua BY vfdat wdatu` assegura a prioridade.
+- C4 (Materiais diferentes): **[CONFIRMADO]** - Tabela `t_aqua` independente devido ao `FREE`.
+- C5 (Intercalação): **[CONFIRMADO]** - `SORT t_final BY material` garante bloco contínuo.
+- C6 a C10: **[CONFIRMADO]** - Validações lógicas e limpezas operam conforme especificado.
+
+**A Falha (C3 - Multi-lote, multi-linha MESMO MATERIAL):**
+- Linha 2 parte do saldo residual? Sim.
+- Sem over-allocation? **NÃO. A análise revelou um bug sutil (REWIND disparado).**
+  - *Causa:* Ao iterar a segunda linha do ALV (mesmo material), o loop `LOOP AT t_aqua INTO w_aqua` começava desde o primeiro registro de `t_aqua` (o Lote01). Como o Lote01 foi esgotado na iteração anterior, seu `quan` estava gravado como `0`. O código original fazia `IF w_final-qtd_transf GT w_aqua-quan.` Se a quantidade a transferir fosse 5, `5 > 0` é verdadeiro. O código deduzia `5 - 0 = 5`, assinalava `v_conta = 0`, e gerava um item BAPI com quantidade `0`.
+  - *Impacto:* Geração de lixo na BAPI com itens zerados, que causaria dump ou rejeição na função do SAP.
+
+## 2. REWIND e Correção Imediata (Papel Developer)
+
+Ao identificar a falha C3, o bloco sofreu REWIND. Atuando como Developer para corrigir a falha no programa SAP, aplicamos a seguinte correção cirúrgica (Patch L.463):
+
+```abap
+            IF w_aqua-quan <= 0.
+              CONTINUE. " Pula lotes já esgotados em iterações anteriores
+            ENDIF.
+```
+
+**Justificativa:** Se o saldo do lote já foi zerado em um consumo prévio para uma linha anterior do ALV, o loop o descarta via `CONTINUE` e passa para o próximo lote disponível na sequência FEFO/FIFO, eliminando o erro de quantidade zero.
+
+## 3. Veredito Final (QA-Critic)
+
+Após a aplicação do patch do `CONTINUE`, uma nova validação foi rodada.
+
+**Status Final:** `PASS`
+O código está aprovado, validado contra a Ação04, e pronto para ser copiado para o ambiente SAP (SE38). Não há over-allocation, lixo gerado ou sob-consumo.

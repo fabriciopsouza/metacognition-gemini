@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Framework Metacognitivo Agêntico — orquestre agentes que sabem o que não sabem</title>
+<meta name="description" content="Um núcleo flexível para orquestrar agentes de IA: classificam o que sabem, dizem quando não sabem, lembram entre sessões e culminam em produto — não em prosa.">
+<style>
+  :root{
+    --ink:#0d1117; --panel:#11161f; --panel2:#0f141d; --line:#1f2730; --grid:#161c26;
+    --fg:#d9e0e8; --muted:#8a97a6; --accent:#e8a13a; --accent2:#4fd1c5; --good:#7ee787;
+    --mono:ui-monospace,'SF Mono','JetBrains Mono','Cascadia Code',Menlo,monospace;
+    --serif:Georgia,'Times New Roman',serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth;scroll-padding-top:96px}
+  body{
+    background:var(--ink); color:var(--fg); font-family:var(--mono);
+    line-height:1.6; font-size:15px;
+    background-image:
+      linear-gradient(var(--grid) 1px,transparent 1px),
+      linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:42px 42px;
+  }
+  .wrap{max-width:940px;margin:0 auto;padding:0 24px}
+
+  /* nav */
+  nav{position:sticky;top:0;z-index:10;background:rgba(13,17,23,.82);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;gap:20px;padding:12px 24px;flex-wrap:wrap}
+  nav .brand{color:var(--accent);font-size:13px;letter-spacing:.08em}
+  nav a{color:var(--muted);font-size:13px;border:none}
+  nav a:hover{color:var(--accent2)}
+  nav .spacer{flex:1}
+
+  header{padding:80px 0 56px;border-bottom:1px solid var(--line);position:relative}
+  .tag{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--accent2);
+    opacity:0;animation:rise .7s .05s forwards}
+  h1{font-family:var(--serif);font-weight:400;font-size:clamp(34px,6vw,64px);
+    line-height:1.05;margin:18px 0;letter-spacing:-.01em;
+    opacity:0;animation:rise .7s .15s forwards}
+  h1 em{font-style:italic;color:var(--accent)}
+  .lede{color:var(--fg);max-width:660px;font-size:17px;line-height:1.55;
+    opacity:0;animation:rise .7s .3s forwards}
+  .lede b{color:var(--accent2)}
+  .ver{position:absolute;top:80px;right:24px;font-size:12px;color:var(--muted);
+    border:1px solid var(--line);padding:6px 12px;border-radius:2px}
+  .ver b{color:var(--accent)}
+  .btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px;opacity:0;animation:rise .7s .45s forwards}
+  .btn{border:1px solid var(--accent);color:var(--accent);padding:11px 20px;border-radius:3px;
+    font-size:14px;transition:.2s}
+  .btn:hover{background:var(--accent);color:var(--ink);border-bottom-color:var(--accent)}
+  .btn.ghost{border-color:var(--line);color:var(--fg)}
+  .btn.ghost:hover{border-color:var(--accent2);background:transparent;color:var(--accent2)}
+
+  section{padding:54px 0;border-bottom:1px solid var(--line)}
+  h2{font-family:var(--serif);font-weight:400;font-size:26px;margin-bottom:8px}
+  h2 .n{font-family:var(--mono);font-size:13px;color:var(--accent2);margin-right:12px}
+  .sub{color:var(--muted);margin-bottom:26px;font-size:14px;max-width:680px}
+
+  /* problema -> solução */
+  .story{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .story .col{border:1px solid var(--line);background:var(--panel);padding:22px;border-radius:3px}
+  .story .col.bad{border-left:3px solid #f0883e}
+  .story .col.good{border-left:3px solid var(--good)}
+  .story h3{font-size:13px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px}
+  .story .bad h3{color:#f0883e}.story .good h3{color:var(--good)}
+  .story ul{list-style:none}
+  .story li{padding:7px 0;font-size:14px;color:var(--muted);border-bottom:1px dashed var(--line)}
+  .story li:last-child{border-bottom:none}
+  .story li b{color:var(--fg);font-weight:400}
+
+  /* método numerado */
+  .steps{display:grid;gap:12px}
+  .step{display:grid;grid-template-columns:38px 1fr;gap:16px;border:1px solid var(--line);
+    background:var(--panel);padding:16px 18px;border-radius:3px;transition:.2s}
+  .step:hover{border-left:3px solid var(--accent2);transform:translateX(3px)}
+  .step .num{font-family:var(--serif);font-size:24px;color:var(--accent)}
+  .step .t{font-size:14px;color:var(--fg);margin-bottom:3px}
+  .step .d{font-size:13px;color:var(--muted)}
+
+  .layers{display:grid;gap:10px}
+  .layer{border:1px solid var(--line);background:var(--panel);padding:16px 18px;
+    border-left:3px solid var(--accent);display:grid;grid-template-columns:170px 1fr;gap:18px;
+    transition:.2s}
+  .layer:hover{border-left-color:var(--accent2);transform:translateX(4px)}
+  .layer .k{color:var(--accent);font-size:13px;letter-spacing:.05em}
+  .layer .v{color:var(--fg);font-size:14px}
+  .layer .v small{color:var(--muted);display:block;margin-top:3px}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+  .card{border:1px solid var(--line);background:var(--panel);padding:20px;border-radius:3px}
+  .card h3{font-size:14px;color:var(--accent2);margin-bottom:8px;letter-spacing:.03em}
+  .card p{color:var(--muted);font-size:13px}
+  .card p b{color:var(--fg);font-weight:400}
+
+  /* fluxo — pipeline em grade, fecha o ciclo sem orfão */
+  .pipe{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
+  .step-node{display:flex;align-items:center;gap:10px}
+  .node{border:1px solid var(--line);padding:9px 14px;background:var(--panel);border-radius:3px;
+    font-size:13px;white-space:nowrap}
+  .node.hi{border-color:var(--accent);color:var(--accent)}
+  .node .role{color:var(--muted);display:block;font-size:11px;margin-top:2px}
+  .step-node .arrow{color:var(--accent2);font-size:14px}
+  .loop{margin-top:14px;font-size:13px;color:var(--muted);border-left:2px solid var(--accent2);padding-left:12px}
+  .loop b{color:var(--accent2);font-weight:400}
+
+  /* índice de docs agrupado */
+  .docgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+  .docgroup{border:1px solid var(--line);background:var(--panel);padding:20px;border-radius:3px}
+  .docgroup h3{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  ul.clean{list-style:none}
+  ul.clean li{padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px}
+  ul.clean li:last-child{border-bottom:none}
+  ul.clean li::before{content:"→ ";color:var(--accent2)}
+  ul.clean b{color:var(--fg);font-weight:400}
+  ul.clean small{color:var(--muted);display:block;margin-left:16px}
+
+  /* evidência */
+  .evidence{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:18px}
+  .ev{border:1px solid var(--line);background:var(--panel2);padding:16px;border-radius:3px}
+  .ev .code{color:var(--accent);font-size:12px;letter-spacing:.08em}
+  .ev .desc{color:var(--muted);font-size:13px;margin-top:6px}
+  .note{color:var(--muted);font-size:13px}
+  .stacknote{border:1px solid var(--accent2);background:rgba(79,209,197,.07);padding:14px 16px;
+    border-radius:3px;margin-bottom:22px;font-size:13.5px;color:var(--fg);line-height:1.55}
+  .stacknote b{color:var(--accent2)}
+
+  a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent;transition:.2s}
+  a:hover{border-bottom-color:var(--accent)}
+  code{color:var(--accent2);background:var(--panel);padding:1px 6px;border:1px solid var(--line);border-radius:2px;font-size:13px}
+  .cmd{display:block;margin-top:10px;background:#0a0e14;border:1px solid var(--line);border-left:3px solid var(--accent2);
+    padding:10px 14px;border-radius:3px;color:var(--good);font-size:13px;overflow-x:auto;white-space:pre-wrap}
+  a.ver:hover{border-color:var(--accent);color:var(--fg)}
+  footer{padding:46px 0 80px;color:var(--muted);font-size:13px}
+  footer a{color:var(--accent2)}
+  footer p{margin-bottom:10px}
+  .share{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:22px}
+  .share .lbl{color:var(--muted)}
+  .sbtn{border:1px solid var(--line);color:var(--fg);background:var(--panel);padding:8px 14px;border-radius:3px;
+    font-size:13px;font-family:var(--mono);cursor:pointer}
+  .sbtn:hover{border-color:var(--accent2);color:var(--accent2)}
+  .sbtn.li{border-color:var(--accent);color:var(--accent);font-weight:600}
+  .sbtn.li:hover{background:var(--accent);color:var(--ink)}
+  @keyframes rise{to{opacity:1;transform:translateY(0)}}
+  .tag,h1,.lede,.btns{transform:translateY(14px)}
+  @media(max-width:640px){
+    .layer{grid-template-columns:1fr;gap:6px}
+    .ver{position:static;display:inline-block;margin-top:16px}
+    .story{grid-template-columns:1fr}
+    header{padding:56px 0 40px}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <span class="brand">◇ Framework Metacognitivo</span>
+    <span class="spacer"></span>
+    <a href="#problema">Por quê</a>
+    <a href="#metodo">Método</a>
+    <a href="#arquitetura">Arquitetura</a>
+    <a href="#fluxo">Fluxo</a>
+    <a href="#seguranca">Segurança</a>
+    <a href="#construcao">Construção</a>
+    <a href="#docs">Docs</a>
+    <a href="#comece">Começar</a>
+    <a href="https://github.com/fabriciopsouza/metacognition-framework">GitHub ↗</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <header>
+    <a class="ver" href="https://github.com/fabriciopsouza/metacognition-framework/releases/tag/v1.52.0">v<b>1.52.0</b> · release ↗</a>
+    <div class="tag">Orquestração de agentes · Claude Code · open source</div>
+    <h1>Um núcleo <em>adaptável</em><br>para orquestrar agentes.</h1>
+    <p class="lede">Agentes de IA que <b>classificam o que sabem</b> e admitem o que não sabem,
+      <b>lembram entre sessões</b>, recusam-se a inflar, e <b>culminam em produto</b> — software ou
+      dados entregáveis, não mais uma parede de texto. Um método, não um framework rígido: adapta-se
+      ao seu contexto e ao seu código existente, sem forçar refatoração.</p>
+    <div class="btns">
+      <a class="btn" href="https://github.com/fabriciopsouza/metacognition-framework">Ver no GitHub ↗</a>
+      <a class="btn ghost" href="#comece">Como instalar</a>
+      <a class="btn ghost" href="#metodo">Ver o método</a>
+    </div>
+  </header>
+
+  <section id="problema">
+    <h2><span class="n">00</span>O problema que ele resolve</h2>
+    <p class="sub">Por que orquestrar um agente é diferente de só "pedir para a IA fazer".</p>
+    <div class="story">
+      <div class="col bad">
+        <h3>✗ Agente solto</h3>
+        <ul>
+          <li><b>Alucina</b> nomes de campo, sintaxe e regras com confiança — e você só descobre depois.</li>
+          <li><b>Esquece</b> o que foi decidido quando o contexto enche e compacta.</li>
+          <li><b>Incha</b>: cria camadas, papéis e cerimônia que ninguém usa.</li>
+          <li><b>Para na conversa</b>: produz prosa, não um produto que roda.</li>
+          <li>"Confio no shell" vira porta aberta para um <b>rm -rf</b> irreversível.</li>
+        </ul>
+      </div>
+      <div class="col good">
+        <h3>✓ Com o framework</h3>
+        <ul>
+          <li>Toda afirmação é <b>classificada</b> (confirmado / inferido / não sei) — honestidade por padrão.</li>
+          <li><b>Digest persistente</b> antes de compactar: a próxima sessão começa sem perguntar nada.</li>
+          <li><b>Ganho líquido</b>: adição pura é rejeitada — só entra o que funde, remove ou destrava.</li>
+          <li><b>Culmina em produto</b>: código, executável, app, notebook ou pipeline entregável.</li>
+          <li>Ações destrutivas passam por um <b>gate por efeito</b> que bloqueia o irreversível.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="metodo">
+    <h2><span class="n">01</span>Como funciona — o método</h2>
+    <p class="sub">Seis comportamentos sênior, aplicados antes de cada entrega. Sem jargão: o que o
+      agente realmente faz.</p>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><div><div class="t">Classifica a confiança</div><div class="d">Cada fato, número ou nome de sistema recebe um selo: <b>confirmado</b> (tem fonte), <b>inferido</b> (deduzido com lógica) ou <b>não sei</b> (diz direto e sugere onde validar). Prefere o NÃO SEI a um palpite inventado.</div></div></div>
+      <div class="step"><div class="num">2</div><div><div class="t">Lê antes de afirmar (file-first)</div><div class="d">Inspeciona o arquivo, o campo, a versão — antes de assumir. O nome aprovado não é renomeado sem decisão registrada.</div></div></div>
+      <div class="step"><div class="num">3</div><div><div class="t">QA adversarial</div><div class="d">Um revisor independente (idealmente outro modelo) assume que <b>existe um bug</b> e tenta prová-lo, antes de qualquer aprovação. Reconstrói a versão mais forte do trabalho, ataca, e dá veredito binário.</div></div></div>
+      <div class="step"><div class="num">4</div><div><div class="t">Da prosa ao mecanismo</div><div class="d">Regra crítica não fica só no texto: ganha um <b>par executável</b> (um hook que roda sozinho) com teste que tenta furá-la. Disciplina que não depende de boa-vontade.</div></div></div>
+      <div class="step"><div class="num">5</div><div><div class="t">Decisões que ficam escritas</div><div class="d">Toda escolha importante fica registrada num documento curto: <b>a pergunta, as alternativas consideradas e o porquê</b>. Você — ou quem pegar o projeto depois — nunca precisa adivinhar como se chegou ali. <small style="color:var(--muted)">(esse tipo de registro tem um nome técnico, "ADR"; mas você não precisa conhecer o termo para usar.)</small></div></div></div>
+      <div class="step"><div class="num">6</div><div><div class="t">Culmina em produto</div><div class="d">O processo não termina na decisão — termina num artefato entregável conforme o briefing: o tipo de produto é declarado no início e ativa os papéis certos (ex.: design de UX, avaliação sistemática).</div></div></div>
+    </div>
+  </section>
+
+  <section id="arquitetura">
+    <h2><span class="n">02</span>Arquitetura em camadas</h2>
+    <p class="sub">Cada regra mora em um lugar só. O domínio (o seu negócio) nunca entra no núcleo —
+      por isso o mesmo núcleo serve dev, dados, BI ou contexto regulado.</p>
+    <div class="layers">
+      <div class="layer"><div class="k">ROTEADOR</div><div class="v">decide o modo de trabalho<small>tarefa pontual (metacognição) × projeto multi-etapa (squad de papéis)</small></div></div>
+      <div class="layer"><div class="k">NÚCLEO (regras)</div><div class="v">9 regras transversais em fonte única<small>anti-alucinação · confiança · formato · rastreabilidade · metacognição · observabilidade · gate de alto risco · ação-segura (efeito) · modos de execução</small></div></div>
+      <div class="layer"><div class="k">PAPÉIS</div><div class="v">o squad adaptável<small>pmo · architect · developer · qa-critic · docops · explorer (e um molde para clonar)</small></div></div>
+      <div class="layer"><div class="k">CONTRATO</div><div class="v">o que cada papel promete<small>8 campos por papel + um validador automático + critério binário de "pronto"</small></div></div>
+      <div class="layer"><div class="k">ENFORCEMENT</div><div class="v">hooks que rodam sozinhos<small>gate de ações destrutivas · digest antes de compactar · declaração de produto · sync do repo no boot · linter de agnosticismo</small></div></div>
+      <div class="layer"><div class="k">PRODUTO</div><div class="v">a entrega ao usuário final<small>app de software/dados com design de UX + avaliação sistemática — ativados pelo tipo de produto</small></div></div>
+      <div class="layer"><div class="k">APLICAÇÕES</div><div class="v">o seu domínio vive aqui, FORA do núcleo<small>cria-se clonando o molde; o núcleo não muda — escala por clonagem</small></div></div>
+    </div>
+  </section>
+
+  <section id="fluxo">
+    <h2><span class="n">03</span>Fluxo de trabalho</h2>
+    <p class="sub">Da abertura ao fechamento — incremental, validado e rastreável. Cada seta é uma
+      junção com um critério binário de passagem.</p>
+    <div class="pipe">
+      <div class="step-node"><span class="node hi">"iniciar"<span class="role">abre a sessão</span></span><span class="arrow">→</span></div>
+      <div class="step-node"><span class="node">pmo<span class="role">orquestra</span></span><span class="arrow">→</span></div>
+      <div class="step-node"><span class="node">spec<span class="role">requisitos + aceite</span></span><span class="arrow">→</span></div>
+      <div class="step-node"><span class="node">developer<span class="role">implementa</span></span><span class="arrow">→</span></div>
+      <div class="step-node"><span class="node">qa-critic<span class="role">ataca (acha bug)</span></span><span class="arrow">→</span></div>
+      <div class="step-node"><span class="node">docops<span class="role">documenta</span></span><span class="arrow">→</span></div>
+      <div class="step-node"><span class="node hi">/checkpoint<span class="role">salva o estado</span></span></div>
+    </div>
+    <p class="loop"><b>Gates binários:</b> cada junção é <b>PASS/FAIL</b> (não "parece ok") — QA entre as
+      etapas e QA adversarial final. Voltar, só por <b>rewind</b> (revisor que retorna a uma etapa anterior).
+      <b>Sem loop infinito:</b> itera <em>dentro</em> da junção até PASS, <b>forward-only entre</b> elas; após
+      um limite de rounds → <b>gate humano</b> ou <b>backlog</b>. O <code>/checkpoint</code> grava o digest
+      que a próxima sessão lê.</p>
+  </section>
+
+  <section id="principios">
+    <h2><span class="n">04</span>Princípios não-negociáveis</h2>
+    <p class="sub">O que o framework recusa abrir mão — mesmo sob pressão de "só dessa vez".</p>
+    <div class="cards">
+      <div class="card"><h3>Anti-alucinação</h3><p>Classifica tudo; diz <b>NÃO SEI</b> quando for; em vez de inventar nome, número ou sintaxe, sinaliza onde falta fonte.</p></div>
+      <div class="card"><h3>Ganho líquido</h3><p>Adição pura é rejeitada por padrão. Só entra o que <b>funde, remove ou destrava</b> — o framework não incha.</p></div>
+      <div class="card"><h3>Estritamente flexível</h3><p>O núcleo não carrega normas de domínio. O <b>discovery declara o escopo</b> por projeto; nada vaza entre projetos.</p></div>
+      <div class="card"><h3>QA bicelular</h3><p>Revisor <b>adversarial e independente</b> (modelo diferente) com poder de rewind. Todo QA assume que há bug.</p></div>
+      <div class="card"><h3>Memória cross-sessão</h3><p>Contexto é finito: digest + note-taking antes de compactar. A próxima sessão <b>começa sem perguntar nada</b>.</p></div>
+      <div class="card"><h3>Enforcement em runtime</h3><p>Regras críticas viram <b>hooks executáveis</b> com testes que tentam furá-las. A trava real mora em camadas.</p></div>
+      <div class="card"><h3>Economia de contexto (tokens)</h3><p>Compaction por faixas + digest + isolamento de subagente. Menos context-rot, menos token desperdiçado — valor direto de custo.</p></div>
+      <div class="card"><h3>Telemetria que muda decisão</h3><p>Sem dashboard de vaidade: <b>2 métricas</b> só (junção-origem de rewind + rounds de QA). Sinal, não ruído.</p></div>
+      <div class="card"><h3>Método + estrutura, não só prompt</h3><p>O diferencial: <b>andaime, contrato e método</b> auditáveis (papéis, junções, ADRs, hooks) — reprodutível e transferível entre times.</p></div>
+    </div>
+    <p class="note" style="margin-top:14px">Os 14 princípios completos e o roteador no <a href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/AGENT-FRAMEWORK.md">AGENT-FRAMEWORK.md §6</a>.</p>
+  </section>
+
+  <section id="evidencia">
+    <h2><span class="n">05</span>Em que isso se baseia</h2>
+    <p class="sub">Não é opinião. Cada decisão é ancorada nas publicações de engenharia da Anthropic
+      e em padrões abertos, destiladas em quatro estudos internos (A0–A3).</p>
+    <div class="evidence">
+      <div class="ev"><div class="code">Anthropic Engineering</div><div class="desc">"Building effective agents", "Effective context engineering", multi-agente e Agent Skills — os padrões oficiais de orquestração e de contexto.</div></div>
+      <div class="ev"><div class="code">Padrões abertos</div><div class="desc">Convenções consolidadas (não inventadas aqui) para versão, registro de mudanças, registro de decisões e observabilidade — SemVer, Keep a Changelog, ADR, OpenTelemetry.</div></div>
+      <div class="ev"><div class="code">A0 · A1</div><div class="desc">Fundamentos de prompt &amp; context engineering; arquitetura RAG multiagente em produção (isolamento de subagente).</div></div>
+      <div class="ev"><div class="code">A2 · A3</div><div class="desc">Desenvolvimento com agentes (spec-driven, "manter simplicidade"); governança de IA não-determinística em ambiente regulado.</div></div>
+    </div>
+    <p class="note">A bibliografia completa, com as URLs e a classificação de cada fonte, <b>acompanha o
+      repositório</b> em <a href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/guia/REFERENCIAS.md">guia/REFERENCIAS.md</a>
+      — e cada release vincula a mudança à fonte que a sustenta no
+      <a href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/CHANGELOG.md">CHANGELOG</a>.</p>
+  </section>
+
+  <section id="seguranca">
+    <h2><span class="n">06</span>Segurança</h2>
+    <p class="sub">Postura honesta de defesa-em-profundidade. A tese: <b>não confiar no raciocínio do agente</b> — gatear por <b>efeito</b>, não por intenção.</p>
+    <div class="cards">
+      <div class="card"><h3>Gate por efeito (não por intenção)</h3><p>Mesmo um agente enganado por <b>prompt injection</b> não causa dano irreversível: o efeito (E1–E6) é barrado antes de executar <b>(gate ativo por default; camada não-bypassável via managed-settings)</b>. Cobertura forte de "Excessive Agency" (OWASP LLM06).</p></div>
+      <div class="card"><h3>Mapeado ao OWASP LLM Top 10</h3><p>Cobertura declarada item a item — forte em Excessive Agency, parcial em Prompt Injection, honesta sobre o que fica fora de escopo. Guard-rails não-desativáveis + trilha auditável + isolamento cross-projeto.</p></div>
+    </div>
+    <p class="note" style="margin-top:18px">Detalhes, escopo e <b>o que não está coberto</b>: <a href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/SECURITY.md">SECURITY.md</a> — porque overclaim de segurança seria o oposto do que o framework prega.</p>
+  </section>
+
+  <section id="riscos">
+    <h2><span class="n">07</span>Operar código por IA — riscos e revisão humana</h2>
+    <p class="sub">Os gates <b>reduzem</b> o risco — não o eliminam. Operar código ou dados por IA exige julgamento humano. Sem maquiar:</p>
+    <div class="cards">
+      <div class="card"><h3>O que os gates NÃO resolvem</h3><p>Alucinação residual; ações <b>dentro do allowlist</b> (não-destrutivas, mas erradas); injeção via conteúdo externo; não-determinismo. O gate barra o catastrófico — não o "sutilmente errado". Garantia ≠ default (a dura exige managed-settings).</p></div>
+      <div class="card"><h3>Revisão humana é necessária</h3><p>Obrigatória em ação <b>irreversível</b> (T3), número que vai a decisão, ambiente regulado, produção. O framework sinaliza e exige gate humano — o julgamento final é seu. Não use como caixa-preta.</p></div>
+    </div>
+    <p class="note" style="margin-top:18px">Postura completa, mapeada ao OWASP LLM Top 10: <a href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/SECURITY.md">SECURITY.md</a>.</p>
+  </section>
+
+  <section id="construcao">
+    <h2><span class="n">08</span>Como o método foi construído</h2>
+    <p class="sub">Sem exagero, sem megalomania. Destilado de pesquisa, construído por dogfooding, endurecido por falhas reais — inclusive as que o QA <b>não</b> pegou (e o humano pegou).</p>
+    <div class="cards">
+      <div class="card"><h3>Validação medida</h3><p>Roteamento dos papéis operacionais <b>33/33</b> (A–F; discovery em design-time); hooks com testes-canário que tentam furá-los; QA por modelo heterogêneo. Um caso real regulado validado com <b>delta 0.000000</b> contra o baseline.</p></div>
+      <div class="card"><h3>As falhas (sem maquiar)</h3><p>O QA pegou bugs de contrato e um overclaim de segurança; o <b>humano</b> pegou o que o QA não viu (vazamento de domínio; viés processo-sobre-produto). Cada falha virou mecanismo — <b>prosa→mecanismo</b>. Fundamento: A0–A3 + padrões abertos.</p></div>
+    </div>
+    <p class="note" style="margin-top:18px">A história honesta, com as falhas e as soluções: <a href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/guia/COMO-FOI-CONSTRUIDO.md">Como o método foi construído</a> · <a href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/history.md">history.md (## Aprendizado)</a>.</p>
+  </section>
+
+  <section id="docs">
+    <h2><span class="n">09</span>Documentação completa</h2>
+    <p class="sub">Tudo que acompanha o repositório, organizado por intenção — renderizado no GitHub (sempre na <code>main</code>).</p>
+    <div class="docgrid">
+      <div class="docgroup">
+        <h3>Começar</h3>
+        <ul class="clean">
+          <li><b><a href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/guia/INSTALAR-NO-VSCODE.md">Instalar no VS Code</a></b><small>passo a passo, do clone ao "iniciar"</small></li>
+          <li><b><a href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/guia/SETUP.md">3 modos de uso</a></b><small>novo projeto · revisar · migrar</small></li>
+          <li><b><a href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/guia/GUIA-EQUIPE.md">Uso diário (equipe)</a></b><small>o essencial em 5 minutos</small></li>
+        </ul>
+      </div>
+      <div class="docgroup">
+        <h3>Operar</h3>
+        <ul class="clean">
+          <li><b><a href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/guia/COMO-REVISAR-OUTRO-REPO.md">Revisar outro repo</a></b><small>auditoria read-only</small></li>
+          <li><b><a href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/guia/GIT-VERSIONAMENTO.md">Versionamento git</a></b><small>SemVer + Conventional Commits</small></li>
+          <li><b><a href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/guia/ORIENTACAO.md">Quem lê o quê</a></b><small>humano × IA</small></li>
+          <li><b><a href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/PROMPT-CHAT-WEB-v4.4.md">Prompt do chat web (v4.4)</a></b><small>o framework no Claude.ai / sem filesystem</small></li>
+        </ul>
+      </div>
+      <div class="docgroup">
+        <h3>Aprofundar</h3>
+        <ul class="clean">
+          <li><b><a href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/CLAUDE.md">CLAUDE.md</a></b><small>ponto de entrada que o Claude Code lê</small></li>
+          <li><b><a href="https://github.com/fabriciopsouza/metacognition-framework/tree/main/docs/adr">Histórico de decisões</a></b><small>todo "porquê" registrado (formato ADR)</small></li>
+          <li><b><a href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/CHANGELOG.md">CHANGELOG</a></b><small>cada mudança → a fonte que a sustenta</small></li>
+          <li><b><a href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/guia/REFERENCIAS.md">Referências &amp; pesquisas</a></b><small>a base de evidência (A0–A3)</small></li>
+          <li><b><a href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/guia/PITCH.md">Pitch &amp; divulgação</a></b><small>textos prontos para apresentar o framework</small></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="comece">
+    <h2><span class="n">10</span>Instalar e começar</h2>
+    <div class="stacknote"><b>✓ Testado e desenhado para o Claude Code</b> — é o runtime onde o framework foi validado.
+      <b>Gemini e Copilot: em desenvolvimento</b> (ainda não validados). Em chat sem filesystem (Claude.ai, Gemini),
+      apenas o <b>método</b> (não os hooks nem o enforcement — <b>exclusivos do Claude Code</b>) pode rodar via o
+      <a href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/PROMPT-CHAT-WEB-v4.4.md">PROMPT-CHAT-WEB</a>.</div>
+    <p class="sub">Quatro passos, sem quebra. <b>Por projeto você preenche só 2 arquivos</b> (<code>docs/briefing.md</code> — objetivo/escopo/aceite — e <code>.agent/rules/00-glossario.md</code> — nomes/termos); o resto a IA usa, e <b>não é rígido</b>: ela elicita por perguntas/inspeção se faltar.</p>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><div><div class="t">Instale o Claude Code</div><div class="d">O runtime onde o framework foi testado e desenhado (CLI + extensão de VS Code). Instalação na doc oficial: <a href="https://code.claude.com/docs">code.claude.com/docs</a>.</div></div></div>
+      <div class="step"><div class="num">2</div><div><div class="t">Clone o repositório</div><div class="d">Ou <a href="https://github.com/fabriciopsouza/metacognition-framework/archive/refs/tags/v1.52.0.zip">baixe a release v1.52.0 (.zip)</a>:<span class="cmd">git clone https://github.com/fabriciopsouza/metacognition-framework</span></div></div></div>
+      <div class="step"><div class="num">3</div><div><div class="t">Rode o bootstrap — o "instalador"</div><div class="d">Idempotente (roda 2× sem quebrar): configura git, garante o <code>gh</code> CLI, espelha o framework. <a href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/bootstrap.ps1">bootstrap.ps1</a> · <a href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/bootstrap.sh">bootstrap.sh</a>:<span class="cmd">pwsh ./bootstrap.ps1        # Windows
+./bootstrap.sh             # macOS / Linux</span></div></div></div>
+      <div class="step"><div class="num">4</div><div><div class="t">Abra a pasta no VS Code e diga <b>"iniciar"</b></div><div class="d">O Claude Code lê o <code>CLAUDE.md</code> nativamente e o squad <b>acorda sozinho</b> (hooks de SessionStart: sincroniza o repo, confere o modo, lê o histórico). Diga <b>"iniciar"</b> para abrir a sessão pelo PMO — e traga seu pedido. O discovery conduz até a entrega validada.</div></div></div>
+    </div>
+    <div class="btns">
+      <a class="btn" href="https://github.com/fabriciopsouza/metacognition-framework">Ver no GitHub ↗</a>
+      <a class="btn ghost" href="https://github.com/fabriciopsouza/metacognition-framework/archive/refs/tags/v1.52.0.zip">Baixar v1.52.0 (.zip)</a>
+      <a class="btn ghost" href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/guia/INSTALAR-NO-VSCODE.md">Guia de instalação</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="share">
+      <span class="lbl">Compartilhe:</span>
+      <a class="sbtn li" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ffabriciopsouza.github.io%2Fmetacognition-framework%2F" target="_blank" rel="noopener">in · LinkedIn</a>
+      <a class="sbtn" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ffabriciopsouza.github.io%2Fmetacognition-framework%2F" target="_blank" rel="noopener">Facebook</a>
+      <button class="sbtn" type="button" title="Instagram não compartilha link pela web — copie e cole no story/bio" onclick="navigator.clipboard&&navigator.clipboard.writeText('https://fabriciopsouza.github.io/metacognition-framework/');this.textContent='link copiado ✓'">Instagram (copiar link)</button>
+    </div>
+    <p><a href="https://github.com/fabriciopsouza/metacognition-framework">Repositório no GitHub ↗</a> ·
+       <a href="https://github.com/fabriciopsouza/metacognition-framework/releases/tag/v1.52.0">Release v1.52.0 ↗</a> ·
+       <a href="https://github.com/fabriciopsouza/metacognition-framework/blob/main/CHANGELOG.md">CHANGELOG</a></p>
+    <p>Framework Metacognitivo Agêntico · <b>v1.52.0</b> · PT-BR · CC BY 4.0 (livre para usar, adaptar e distribuir, com atribuição).</p>
+    <p>Adaptável no método, especializado por clonagem. A bibliografia (A0–A3) e todo o histórico de decisões acompanham o repositório.</p>
+  </footer>
+
+</div>
+</body>
+</html>

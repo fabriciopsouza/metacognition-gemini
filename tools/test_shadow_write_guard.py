@@ -85,8 +85,8 @@ def main():
     except Exception:
         canon = ""
     if canon:
-        if probe("git push git@github.com:fabriciopsouza/metacognition-gemini.git main") != "deny":
-            fails.append("push p/ repo do gemini deveria ser DENY (write-isolation)")
+        if probe("git push git@github.com:fabriciopsouza/metacognition-framework.git main") != "deny":
+            fails.append("push p/ repo master (framework) deveria ser DENY (write-isolation)")
         if probe("git push git@github.com:fabriciopsouza/metacognition-framework-premium.git main") != "deny":
             fails.append("push p/ premium online deveria ser DENY (write-isolation)")
         if probe("git push origin main") != "allow":

@@ -28,7 +28,7 @@ def find_pwsh():
 def run_hook(pwsh, cwd):
     payload = {"trigger": "auto", "cwd": cwd}
     proc = subprocess.run(
-        [pwsh, "-NoProfile", "-NonInteractive", "-File", HOOK],
+        [pwsh, "-NoProfile", "-ExecutionPolicy", "Bypass", "-NonInteractive", "-File", HOOK],
         input=json.dumps(payload),
         capture_output=True,
         text=True,

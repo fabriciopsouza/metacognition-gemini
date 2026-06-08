@@ -37,9 +37,11 @@ def repo_root(start=None):
 
 def is_framework_repo(root=None):
     """É o repo-FONTE do framework (instalador), não um projeto que o USA. Assinatura: AGENT-FRAMEWORK.md
-    + _shared/ + tools/web_export.py na raiz (o gerador das distros — só existe na fonte)."""
+    (ou GEMINI-FRAMEWORK.md) + _shared/ + tools/web_export.py na raiz (o gerador das distros — só existe na fonte)."""
     root = root or repo_root()
-    return (os.path.isfile(os.path.join(root, "AGENT-FRAMEWORK.md"))
+    has_sig = (os.path.isfile(os.path.join(root, "AGENT-FRAMEWORK.md")) or 
+               os.path.isfile(os.path.join(root, "GEMINI-FRAMEWORK.md")))
+    return (has_sig
             and os.path.isdir(os.path.join(root, "_shared"))
             and os.path.isfile(os.path.join(root, "tools", "web_export.py")))
 

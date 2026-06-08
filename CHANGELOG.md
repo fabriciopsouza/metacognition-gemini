@@ -1,8 +1,77 @@
-## [1.0.0-gemini] - 2026-06-05
+# CHANGELOG
+
+## [1.52.0] - 2026-06-05
 
 ### Added
-- Fork ideológico do `metacognition-framework` (v2.2.0) nativo para Claude.
-- Modificação arquitetural profunda para atuar especificamente nas deficiências do ecossistema Gemini (sicofância, *token saving*, geração prematura de *mocks*).
-- Implementação da **Validação Adversarial Obrigatória**, exigindo a troca física do modelo de IA (QA) na etapa final de entrega.
-- Adaptação das 5 etapas da Metacognição Pontual (Decomposição, Resolução, Validação, etc.) estruturada em blocos diretos em oposição ao estilo de prosa livre.
-- Suporte nativo e explícito a *Artifacts* e *Planning Mode* para governança e *Ownership*.
+- ADR-0002 Aceito
+- ADR-002 Aceito
+- ADR-003 Aceito
+- ADR-004 Aceito
+- ADR-005 Aceito
+- ADR-006 Aceito
+- ADR-007 Aceito
+- ADR-009 Aceito
+- ADR-010 Aceito
+- ADR-011 Aceito
+- ADR-012 Aceito
+- ADR-013 Aceito
+- ADR-014 Aceito
+- ADR-015 Aceito
+- ADR-016 Aceito
+- ADR-017 Aceito
+- ADR-018 Aceito
+- ADR-019 Aceito
+- ADR-020 Aceito
+- ADR-021 Aceito
+- ADR-022 Aceito
+- ADR-023 Aceito
+- ADR-024 Aceito
+- ADR-025 Aceito
+- ADR-026 Aceito
+- ADR-027 Aceito
+- ADR-028 Aceito
+- ADR-029 Aceito
+- ADR-030 Aceito
+- ADR-033 Aceito
+- ADR-034 Aceito
+- ADR-035 Aceito
+- ADR-036 Aceito
+- ADR-037 Aceito
+- ADR-038 Aceito
+- ADR-039 Aceito
+- ADR-040 Aceito
+- ADR-041 Aceito
+- ADR-042 Aceito
+- ADR-043 Aceito
+- ADR-044 Aceito
+- ADR-045 Aceito
+- ADR-046 Aceito
+- ADR-047 Aceito
+- ADR-048 Aceito
+- ADR-049 Aceito
+- ADR-050 Aceito
+- ADR-051 Aceito
+- ADR-052 Aceito
+- ADR-053 Aceito
+- ADR-054 Aceito
+- ADR-055 Aceito
+- ADR-056 Aceito
+- ADR-057 Aceito
+- ADR-058 Aceito
+- ADR-059 Aceito
+- ADR-060 Aceito
+- ADR-061 Aceito
+- ADR-062 Aceito
+- ADR-063 Aceito
+- ADR-064 Aceito
+- ADR-065 Aceito
+- ADR-066 Aceito
+- ADR-067 Aceito
+- ADR-068 Aceito
+- ADR-069 Aceito
+- ADR-070 Aceito
+- ADR-071 Aceito
+- ADR-072 Aceito
+- ADR-073 Aceito
+- ADR-074 Aceito
+- ADR-076 Aceito

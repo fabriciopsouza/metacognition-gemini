@@ -1,0 +1,55 @@
+# AGENTS.md — Framework Metacognitivo Agêntico
+
+Roteador: AGENT-FRAMEWORK.md (v2.3) · Núcleo SSoT: _shared/ ·
+Papéis de processo: .agent/skills/ · Regras: .agent/rules/ · Workflows: .agent/workflows/
+
+## Papéis de processo (flexíveis)
+pmo · architect · developer · qa-critic · docops · explorer (read-only) · _template (molde).
+
+## Regras sempre ativas
+Ver .agent/rules/ (todas referenciam _shared/).
+
+## Primeira ação obrigatória
+/start-session (ou diga "iniciar") — comando em `.claude/commands/start-session.md` (ADR-024). Não é rígido: o agente também elicita por prosa/perguntas/inspeção.
+
+## Modos de execução (v1.7.0 — ADR-005)
+3 níveis registrados em `~/.claude/framework-mode.json` com ratchet forward-only:
+**default** (prompts conservadores) · **avançado** (blanket shell + ask em push/merge) · **autosuficiente** (`bypassPermissions` + deny mínimo). Reativação só quando `~/.claude/hooks/framework-sync.ps1` muda. Detalhe: `_shared/execution-modes/SKILL.md`.
+
+## Modo NON-ADMIN — gates anunciados (v1.34.0 — ADR-047)
+Em máquina com restrição de scripts (GPO bloqueia PowerShell → hooks não rodam), usar o perfil **non-admin** (`settings.nonadmin.json` sem hooks; ativar com `python bootstrap.py` ou clonar o público non-admin). A versão **admin (com hooks) continua a default**. **Automação nunca invisível:** sem hooks, o agente **declara e aplica inline** cada gate (ROTA/route-gate · mission/product_type · action-safety por efeito · ler-antes-de-sobrescrever), avisando e orientando. Linters Python seguem on-demand. Detalhe: `guia/MODO-NON-ADMIN.md`.
+
+## Auto-boot global (v1.8.0 — ADR-006)
+Após `bootstrap.ps1`, o squad acorda automaticamente em qualquer IDE/projeto cujo owner do remote `origin` bata com `~/.claude/squad-owners.txt` (substring match). Fallback: `AGENTS.md` ou `.agent/` no projeto. Pular: `.claude/session.lock` ou `~/.claude/session.lock`.
+
+## Régua §0 — GANHO LÍQUIDO (v1.9.0 — ADR-007)
+Princípio 10 do `AGENT-FRAMEWORK.md` §6: adição pura é rejeitada. Aceitar só se (a) funde/remove ≥ adiciona, (b) reduz tokens/latência, ou (c) destrava eval inalcançável editando existente. Sub-modo `pesquisa-cascata` do discovery (sob demanda) é a primeira aplicação.
+
+## Método sênior de discovery — reforço transversal (v1.10.0 — ADR-009; passo 9 RRC v1.11.0 — ADR-010)
+Quando há **fonte canônica/normativa citada**, o discovery carrega `metodo-senior.md` (companion sob demanda). **9 passos:** mapeamento + **vigência** + complementações + cross-domain + pertinência + elicitação + classificação + adversarial + **coherence pass (RRC)**. Domain-agnóstico. Output ganha **3 seções obrigatórias**: Antecipações + Backlog + **Gaps não-bloqueantes**. Princípio 11 reescrito em v1.11.0 (observação meta-cognitiva, não auto-observação dura) + method-audit autônomo no `/checkpoint`.
+
+## Framework agnóstico — discovery declara escopo (v1.11.0 — ADR-010)
+Núcleo NÃO carrega listas hardcoded de normas/convenções de domínio. Discovery pergunta explicitamente: (a) regulado? quais normas? (b) alto-risco? (c) regra com semântica? (d) gaps não-bloqueantes? (e) alimenta outra sessão/agente? (ADR-012 v1.13.0) Respostas vão para `## Escopo declarado pelo discovery` no output e disparam gates downstream (`high-stakes-gate`, reforço sênior, roteamento reflexivo). Sem declaração → defaults agnósticos. **Anti-vazamento cross-projeto**: não importar convenção/norma de outra sessão sem confirmação. **Gaps não-bloqueantes flagados, não silenciados** (abordagem sênior). HITL via `execution-modes` (ADR-005). Princípio 12 do §6.
+
+## Handoff cross-sessão obrigatório quando declarado (v1.13.0 — ADR-012)
+discovery passo 6(e) "alimenta outra sessão?" → SE SIM, Pacote de handoff (`metacognition-core` §Pacote) é entregável obrigatório via J5. Conteúdo mínimo: artefato+versão, localização, acesso, prompt pronto-para-colar, pendências. Teste binário: outra sessão começa sem perguntar nada? Princípio 14 §6. +qa-critic rules #6 (RCA gate) e #7 (cobertura temporal pós-J4).
+
+## QA bicelular — junções binárias + process-critic com rewind (v1.12.0 — ADR-011)
+6 junções no fluxo squad (J0-J5) com artefato-gate + critério binário declarados em `/handoff`. DENTRO da junção: iterações até PASS. ENTRE junções: forward-only (anti-loop). Process-critic adversarial (qa-critic subagente isolado) ao final de BLOCO APROVADO + on-demand + opcional /checkpoint; rewind cascata para qualquer J_i; downstream re-roda. **TODO QA é adversarial.** SUPLANTA (§Decisão/§Alternativas muda → novo ADR + Substituído por) × EMENDA (§Implementação/§Consequências muda → in-place STATUS-field). Within-junction rounds = EMENDA. Princípio 13 do §6.
+
+## Runtime hooks + entrega de produto (v1.21.0 — ADR-021/022/023)
+`compaction-gate` (PreCompact: bloqueia compaction sem digest, ADR-021) · `mission-gate` (SessionStart: product_type/escopo confirmado por modo de execução, ADR-022; taxonomia na aplicação) · app `exemplos/dominio-software/` (ux-designer + evals-engineer, ADR-023 — o framework culmina em PRODUTO; governance/poda já cobertos pelo núcleo). `_shared/` inalterado/agnóstico.
+
+## Entrada determinística (v1.22.0 — ADR-027/028/029/030)
+Mecaniza a ENTRADA (incidente AIVI: agente executou tarefa regulada sem rotear). `route-gate` (UserPromptSubmit universal, fail-open, ADR-027) + `ensure-global-wiring` (self-heal hook-preserving que cura o clobber do settings global a cada abertura do repo) + §disable-com-memória (session.lock com data/motivo + reativação). **Output-style ≠ processo** (ADR-028: precedência nível 7 — persona nunca suplanta regras/roteamento). `doc-intake` (ADR-029: parse determinístico pdf/docx/xlsx/pptx/md/txt → chunk → manifesto sha256, offline/sem-embeddings; discovery cita proveniência). `consistency-gate` (ADR-030: auditoria de fechamento fail-soft — version-sync/adr-status/checkpoint/unpushed/transientes; wirada no docops) + `guia/RESILIENCIA-ACESSO.md`. `_shared/` agnóstico (check_core_agnostic PASS).
+
+## Aplicações
+Domínios específicos (BI, regulado, etc.) NÃO ficam no núcleo — são criados clonando
+.agent/skills/_template e vivem FORA do núcleo (no seu repositório).
+Ver `exemplos/README.md` para o guia de criação.
+
+## Roteador base
+https://raw.githubusercontent.com/fabriciopsouza/metacognition-framework/main/AGENT-FRAMEWORK.md
+
+
+No perfil non-admin, os gates devem ser sempre anunciados para manter a automacao visivel.

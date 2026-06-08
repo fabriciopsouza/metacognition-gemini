@@ -1,0 +1,28 @@
+{
+  "version": "1.0",
+  "comment": "Configuração do hub local Cross-IA. Edite local_hub_path para o caminho real da pasta compartilhada na sua máquina. NÃO hardcode — esta config é a fonte de verdade.",
+  "local_hub_path": "C:\\Users\\fabriciosouza\\cross-ai-hub-local",
+  "git_hub_path": "reports-improve-cross-ai",
+  "agents": {
+    "gemini": {
+      "repo": "metacognition-gemini",
+      "cross_ai_outbox": "docs/_private/cross-ai/outbox",
+      "reports_dir": "reports-improve-cross-ai",
+      "case_study_dir": "case-study"
+    },
+    "claude": {
+      "repo": "metacognition-framework",
+      "note": "Repo exclusivo Claude Code — Gemini não escreve aqui (ADR-069)",
+      "cross_ai_inbox_local": "C:\\Users\\fabriciosouza\\cross-ai-hub-local\\inbox"
+    }
+  },
+  "hub_structure": {
+    "inbox": "inbox/YYYY/MM/DD/",
+    "archive": "archive/YYYY/MM/DD/",
+    "index": "INDEX.md"
+  },
+  "filename_pattern": "<thread>__from-<ia>__to-<dest>__<sha8>.md",
+  "scan_on_start": true,
+  "fail_open": true,
+  "seen_tracker": ".cross-ai-seen.json"
+}
