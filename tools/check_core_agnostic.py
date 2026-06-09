@@ -47,8 +47,13 @@ CORE_GLOBS = [
     ".agent/skills/**/*.md",
     ".agent/rules/**/*.md",
     ".agent/workflows/**/*.md",
+    # Passo 9 / ADR-020 gate preventivo: prompt-roots Gemini-específicos.
+    # Qualquer GEMINI*.md ou PROMPT*.md criado na raiz é escaneado automaticamente,
+    # evitando reincidência de contaminação por normas hardcoded (incidente GEMINI_Metcognition.txt).
+    "GEMINI*.md",
+    "PROMPT*.md",
 ]
-CORE_FILES = ["AGENT-FRAMEWORK.md", "CLAUDE.md", "AGENTS.md", "README.md"]
+CORE_FILES = ["AGENT-FRAMEWORK.md", "GEMINI-FRAMEWORK.md", "CLAUDE.md", "AGENTS.md", "README.md"]
 
 # Tier SENSÍVEL — varre o repo inteiro EXCETO estes diretórios e arquivos.
 SENSITIVE_PRUNE_DIRS = {".git", "node_modules", "outputs", "_private"}
