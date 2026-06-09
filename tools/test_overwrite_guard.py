@@ -33,7 +33,7 @@ def find_pwsh():
 
 def run_ps1(pwsh, payload, manifest):
     env = dict(os.environ, OVERWRITE_GUARD_MANIFEST=manifest)
-    p = subprocess.run([pwsh, "-NoProfile", "-ExecutionPolicy", "Bypass", "-NonInteractive", "-File", PS1],
+    p = subprocess.run([pwsh, "-NoProfile", "-NonInteractive", "-File", PS1],
                        input=json.dumps(payload), capture_output=True, text=True, env=env)
     return p.returncode
 

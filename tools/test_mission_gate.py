@@ -26,7 +26,7 @@ def find_pwsh():
 def run_hook(pwsh, cwd):
     payload = {"hook_event_name": "SessionStart", "cwd": cwd}
     proc = subprocess.run(
-        [pwsh, "-NoProfile", "-ExecutionPolicy", "Bypass", "-NonInteractive", "-File", HOOK],
+        [pwsh, "-NoProfile", "-NonInteractive", "-File", HOOK],
         input=json.dumps(payload),
         capture_output=True,
         text=True,

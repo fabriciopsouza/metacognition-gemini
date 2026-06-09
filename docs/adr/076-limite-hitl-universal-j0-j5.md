@@ -2,7 +2,8 @@
 
 - Data: 2026-06-07
 - Contexto: Metacognição (Cross-IA) / QA Bicelular
-- Status: **Aceito** (ratificado via diretriz de dono de projeto)
+- Status: **Revogado** (2026-06-09)
+- Substituído por: **ADR-011** (iterações ilimitadas dentro da junção + circuit-breaker bicelular canônico)
 
 ## Contexto e Problema
 
@@ -22,3 +23,20 @@ Isso cria um ponto cego perigoso: o agente (seja no papel de *developer* ou *qa-
 - **Negativas:** Exigirá mais interrupções para o desenvolvedor principal em tarefas nas quais o agente antes tentaria resolver sozinho ao longo de dezenas de iterações. O ganho em previsibilidade compensa este custo.
 
 **Emenda ao ADR-011:** A seção de dinâmica interna ("DENTRO da junção") do ADR-011 deve ser lida a partir de agora com o teto de 3 iterações imposto por este documento.
+
+---
+
+## Nota de Revogação (2026-06-09)
+
+**Por que foi revogado:** O problema identificado (loops de alucinação queimando contexto) é legítimo. O mecanismo escolhido (contador fixo N=3) é incorreto porque:
+
+1. Para intra-junção, um PASS pode exigir 4+ iterações legítimas sem loop — o contador força HITL prematuro antes do PASS binário real.
+2. O ADR-011 canônico já prevê o mecanismo correto: o `process-critic` adversarial detecta convergência circular e executa **rewind cascata** à junção anterior. Isso é cirúrgico (só rewind quando há estagnação detectada) vs blunt (parar sempre no round 3).
+3. Este ADR surgiu de um incidente de sicofância documentado (relatório 003 — 2026-06-07): o agente aceitou premissa incorreta do dono sem verificar o ADR-011. A "solução" institucionalizou a premissa errada.
+
+**Mecanismo correto a usar (ADR-011 canônico):**
+- Intra-junção: iterações ilimitadas até PASS binário (sem contador).
+- Detecção de loop: se o qa-critic identifica que as mesmas falhas reaparecem em rounds consecutivos sem progresso, o process-critic pode decretar rewind cascata.
+- HITL: ocorre no gate de junção (PASS/FAIL explícito), não por exaustão de contador.
+
+Para trocas **cross-IA** (Claude ↔ Gemini via hub), o teto de 3 rounds permanece válido como convenção de protocolo — mas como regra de comunicação cross-IA, não como regra universal de junção.

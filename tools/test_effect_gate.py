@@ -81,7 +81,7 @@ def find_pwsh():
 def run_hook(pwsh, tool, command):
     payload = {"tool_name": tool, "tool_input": {"command": command} if command else {}}
     proc = subprocess.run(
-        [pwsh, "-NoProfile", "-ExecutionPolicy", "Bypass", "-NonInteractive", "-File", HOOK],
+        [pwsh, "-NoProfile", "-NonInteractive", "-File", HOOK],
         input=json.dumps(payload), capture_output=True, text=True,
     )
     out = proc.stdout.strip()

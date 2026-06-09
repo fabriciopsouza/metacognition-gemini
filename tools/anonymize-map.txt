@@ -44,7 +44,7 @@ fechamento AIVI	fechamento do caso real
 github\.com/fabriciopsouza/LIMITES-BATENTES-RECALC	repo privado do mantenedor
 LIMITES-BATENTES-RECALC	repo privado do mantenedor (caso real)
 test-aivi-isolated	repo de teste isolado (caso real)
-gemini/discovery-aivi-metodo-2026-05-27	branch do caso real
+claude/discovery-aivi-metodo-2026-05-27	branch do caso real
 discovery-aivi-metodo-2026-05-27	branch-do-caso
 discovery-aivi-metodo	branch-do-caso
 framework-gaps-from-aivi-case-2026-05-27	framework-gaps-from-case
