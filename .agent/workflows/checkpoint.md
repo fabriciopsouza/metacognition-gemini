@@ -23,6 +23,9 @@ Riscos ativos: <risco + mitigação>
 ## Quando
 Fim de bloco aprovado · antes de encerrar · ao mudar direção · a cada ≥20 turnos.
 
+## Encerramento Otimizado e Handoff de IA
+Ao finalizar um bloco/assunto, ou ao atingir a necessidade de trocar de persona (ex: Developer -> QA), o agente é **OBRIGADO** a rodar `python tools/session_orchestrator.py --next-role <papel> --objective "<resumo>"` e replicar as instruções emitidas pelo script para o usuário, exigindo a cópia do prompt para uma aba nova com o novo modelo ideal. O agente deve encerrar sua interação na janela atual.
+
 ## Gatilho por faixa de ocupação (ADR-016 — v1.16.0)
 Além dos gatilhos acima, dispara por **faixa medida** (degradação é gradiente, não penhasco;
 fronteira inclusiva à esquerda): 🟢<50% normal · 🟡50–69% anotar · 🟠70–84% **produzir digest** ·
@@ -33,6 +36,8 @@ chat = proxy `chars÷3` (alarme de fumaça, ±20–40%).
 estendido com campos de compaction + carimbo de faixa — superset, não artefato paralelo.
 **Formato: `docs/specs/_template-digest/digest.md`** (fonte única; não relistar campos aqui).
 Teste binário (herda P14): a próxima sessão começa sem perguntar nada de volta?
+
+Se o threshold atingir a faixa 🟠 ou 🔴, o agente DEVE acionar o `session_orchestrator.py` para forçar a reciclagem de contexto, passando a persona atual como `--next-role`. A permanência na sessão degradada é proibida.
 
 > **ADR-011 (v1.12.0):** `/checkpoint` é **save-point + gate RRC** (ADR-010 §ii) — NÃO invoca process-critic adversarial automaticamente. Process-critic (qa-critic adversarial em subagente isolado, com poder de rewind cascata) é mandatório no FINAL DE BLOCO APROVADO (release, ADR aceito, spec fechada, feature delivered) e on-demand sob escalação do dono. **Backstop opcional em /checkpoint** ativado explicitamente pelo dono ("rode process-critic agora") — não default.
 

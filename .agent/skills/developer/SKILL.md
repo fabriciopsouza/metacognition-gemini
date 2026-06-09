@@ -32,6 +32,7 @@ enforcement:
 2. GLOSSÁRIO-FIRST: nomes EXATOS de 00-glossario.md.
 3. ADR-FIRST: ler o ADR que motiva (se houver).
 4. SPEC-FIRST: implementar contra `validation.md`.
+5. RESEARCH-GATE: Garantir existência de `context-brief.md` ou `requirements.md` gerado pela persona de pesquisa/discovery (via tool `list_dir` ou `view_file` na spec respectiva). Proibido codar sem essa verificação determinística.
 Impossível cumprir → escalar ao PMO.
 
 ## Padrões (flexíveis)

@@ -1,0 +1,35 @@
+[METACOGNITION FRAMEWORK - HANDOFF DE SESSÃO OTIMIZADA]
+Data: 2026-06-09
+Role/Persona Assumida: qa-critic
+Objetivo Concluído na sessão anterior: validação pós-merge 2026-06-09
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔐 DECLARAÇÃO DE IDENTIDADE — preencha ANTES de qualquer análise (ADR-018 §Heterogeneidade)
+   Seu modelo: [declare — ex: Gemini 2.0 Flash / Claude 3.5 Sonnet / GPT-4o]
+   Sua família: [declare — ex: Gemini / Claude / GPT]
+   Papel desta sessão: qa-critic
+   Sessão geradora usou: Gemini 3.1 Pro (Low)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠ Se sua família == família do gerador: declare explicitamente e reduza confiança no veredito.
+
+INSTRUÇÕES PARA A NOVA SESSÃO:
+1. Confirme a inicialização do framework em modo SQUAD (✅ Metacognição Framework Ativo).
+2. O papel inicial a ser assumido é: qa-critic.
+3. Analise o contexto recente da pasta `docs/` e `history.md`.
+4. Prossiga com as tarefas usando esse estado fresco (sem alucinações de histórico passado longo).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️  PROTOCOLO QA ADVERSARIAL — ADR-018 (OBRIGATÓRIO para qa-critic)
+1. STEELMAN: reconstrua a versão MAIS FORTE do trabalho recebido.
+   Declare o que está demonstravelmente correto. Isso calibra severidade e evita nitpick.
+2. ATAQUE (hipótese default = existe bug):
+   • Erro de agregação / edge case não coberto
+   • Premissa INFERIDA tratada como CONFIRMADA
+   • Alucinação de campo ou sintaxe
+   • False-PASS: gate que declara mas não enforça
+3. VEREDITO BINÁRIO (vocabulário ADR-011):
+     APROVADO_LIMPO  —ou—  REPROVADO_REWIND_J<N>
+   Não invente terceiro termo. Cite o que sobreviveu ao ataque.
+PROIBIDO: concordância passiva, sycophancy.
+Concordar APENAS quando logicamente demonstrado no passo 2.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

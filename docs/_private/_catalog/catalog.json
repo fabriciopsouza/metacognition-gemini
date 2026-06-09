@@ -1,0 +1,156 @@
+[
+  {
+    "report_id": "86147e87",
+    "date": "2026-05-27",
+    "source": "docs\\_private\\_intake\\2026-05-27-plano-otimizacao-framework.md",
+    "skills": [
+      "dev",
+      "discovery",
+      "architect",
+      "qa-critic",
+      "docops",
+      "ux",
+      "research",
+      "spec",
+      "evals"
+    ],
+    "route": "squad",
+    "gaps": [
+      "*Aprendizado/memória de fracassos (ex-G9):* reusar /checkpoint + history.md + ADR.",
+      "*Nada parado/pausado/planejado esquecido (ex-G11):* reusar start-session + history.md."
+    ],
+    "melhorias": [],
+    "boas_praticas": [],
+    "licoes": {},
+    "detecao": [],
+    "placar": []
+  },
+  {
+    "report_id": "5c5384b4",
+    "date": "2026-06-06",
+    "source": "docs\\_private\\_intake\\execution-report-2026-06-06-cross-ai.md",
+    "skills": [
+      "dev",
+      "qa-critic",
+      "research"
+    ],
+    "route": "desconhecido",
+    "gaps": [
+      "repo-identity-gate é ADVISORY, não enforcement: hooks são vetados pelo Kaspersky nesta máquina →",
+      "Hub privado cross-IA não provisionado (falta URL/repo do hub e do Gemini-mãe).",
+      "Reciprocidade (cada IA respeitar o read-only da outra) é acordo, não mecanismo executável daqui.",
+      "equivalence_gate (ADR-071) SHELVED: v2 (por capacidade + HITL-proof) escrita mas NÃO pronta (sem ADR,",
+      "\"Crítica antes de finalizar\" NÃO está mecanizada (qa-critic é prosa no handoff J4, não gate executável)."
+    ],
+    "melhorias": [],
+    "boas_praticas": [],
+    "licoes": {
+      "dev": [
+        "marker no repo é **forjável por cópia** → identidade tem de ser ancestralidade git (autoridade),"
+      ],
+      "qa-critic": [
+        "rodar SEMPRE após escrever, em modelo isolado; pega bug em código que o autor já normalizou."
+      ],
+      "anti-loop / sistemas distribuídos": [
+        "terminação de crítica mútua exige **quiescência/ponto-fixo**"
+      ],
+      "arquitetura de spread": [
+        "fonte única (master) → sombras (export); sombras **só devolvem aprendizado**;"
+      ],
+      "honestidade": [
+        "`deep-research` voltou vazio → **não fabricar fonte**; mecanizar de 1º princípios e declarar."
+      ],
+      "infra": [
+        "PAT-em-texto-plano é risco (incidente) → **SSH** é o fix durável (sem segredo no repo)."
+      ]
+    },
+    "detecao": [
+      "qa-critic isolado (modelo adversarial) pegou o que o developer (eu) não viu, 2×: falso-MASTER e",
+      "O dono out-adversarializou o mecanismo: apontou que o anti-loop por teto-de-rodadas é burlável",
+      "CI cross-plataforma pegou drift de versão pré-existente no main que a release v1.44.0 deixou passar."
+    ],
+    "placar": [
+      "**Falso-MASTER**: export com commits locais classificado MASTER-CANONICO",
+      "**SOMBRA-EXPORT código-morto**: regex de commit nunca casava commits reais",
+      "**Ghost-claims** no cross_ai_gate: verdito sobre claim não-declarada → seal falso",
+      "**Anti-loop insuficiente**: dedup-por-mensagem + teto-por-thread não impedem loop inter-ciclos",
+      "**HITL booleano = teatro** no equivalence_gate (forjável)",
+      "**Equivalência por id literal** força import de solução que não encaixa",
+      "**CI vermelho no main** (vitrine v1.43.0) — release v1.44.0 não atualizou a vitrine",
+      "Confusão de 4 repos homônimos (incidente original)"
+    ]
+  },
+  {
+    "report_id": "bde29fa0",
+    "date": "2026-06-03",
+    "source": "docs\\_private\\_intake\\execution-report.md",
+    "skills": [
+      "dev",
+      "discovery",
+      "architect",
+      "qa-critic",
+      "docops",
+      "ux",
+      "research",
+      "spec"
+    ],
+    "route": "squad",
+    "gaps": [
+      "sync-global/framework-boot (boot machinery, este último GLOBAL fora do repo) podem ser vetados e não são auto-auditados → cobertos só pela exclusão do Kaspersky.",
+      "Anonimização por regex (learnings_public) não-exaustiva: token fora do map E da denylist passa (declarado em LIMITS).",
+      "Fallback .ps1 não carimba liveness → falso-alarme benigno em máquina sem Python.",
+      "\"100% anti-bloqueio em código\" é impossível vs. EDR adaptativo — o 100% é a exclusão (declarado, não overclaim).",
+      "Criação dos repos de relatório (público + por-colaborador) = ação gh do dono (pendente)."
+    ],
+    "melhorias": [
+      "Honestidade da vitrine deixou de ser prosa → mecanizada (gates h/i de drift; detector hedge-aware).",
+      "Resiliência a EDR em camadas (Python+fallback, nudge, pré-push) — uma config cobre admin-Kaspersky/admin-sem-Python/cross-platform.",
+      "Auditor de liveness universal (manifesto) → falha de hook nunca silenciosa.",
+      "Execution-report estendido, não reinventado (já existia 70% — ADR-038/052) com lições-por-skill + corpus público anonimizado opt-in."
+    ],
+    "boas_praticas": [
+      "file-first salvou 2×: descobriu que a vitrine não flui pelo web_export (corrigiu o escopo do F2) e que a feature de report já existia (evitou reinventar).",
+      "Testar contra arquivos reais (não teoria) revelou falsos-positivos do léxico (garante-gh, jamais-inventar-diretiva, não-inventadas-NIH).",
+      "Provar que o gate MORDE (teste negativo), não só que passa.",
+      "qa-critic em modelo isolado após cada bloco — pegou o que o autor não via, todas as vezes.",
+      "Surfaçar custo/consequência antes de override, mesmo em modo autosuficiente (recusei reescrever boot cego)."
+    ],
+    "licoes": {
+      "dev": [
+        "gate determinístico (regex/arquivo) > LLM-no-CI quando o critério é objetivo; fail-closed > fail-open em gate de confiança; carimbo-de-liveness + auditor não-bloqueável = padrão genérico contra \"mecanismo silenciosamente desligado por ambiente\"."
+      ],
+      "discovery": [
+        "sempre checar se a feature **já existe** antes de construir (régua §0 economizou ~70% do ADR-062); inventário por risco (explorer) antes de tocar em N arquivos."
+      ],
+      "architect": [
+        "EMENDA de ADR existente > ADR novo quando o gene já está lá; aplicar ADRs anteriores compõe ganho não-imediato (021/030/044 reusados)."
+      ],
+      "qa-critic": [
+        "hipótese-default-bug pega drift que o autor normaliza; provar vazamento/bite, não só ausência; revisão estática quando não dá pra rodar (PS sem pwsh)."
+      ],
+      "research/spec": [
+        "decisão regulada (LGPD/acesso) é gate humano **mesmo sob autonomia** (high-stakes × execução, ortogonais) — perguntar as 3 bifurcações antes de construir errado."
+      ],
+      "docops": [
+        "\"mecanizado\" só pode ser dito se houver gate de runtime (consent virou gate no CLI, não prosa); LIMITS é o lar do limite honesto (anti-overclaim aplicado a si mesmo)."
+      ],
+      "ux (vitrine)": [
+        "headline honesta pode manter punch (\"agentes que sabem o que não sabem\"); auto-contradição (headline × disclosure) é o overclaim mais comum e o mais invisível ao autor."
+      ]
+    },
+    "detecao": [
+      "Mecanismo pegou: effect-gate barrou meu rm -rf; o auditor ADR-061 declarou ao vivo os 2 hooks vetados (provou-se em produção, não só CI); o consent-gate recusou publicação sem opt-in; build_limits --check forçou LIMITS em sync.",
+      "Humano (dono) pegou o que o mecanismo não tinha: o bloqueio do Kaspersky (via CSV) — eu havia inferido errado que era meu heredoc; o dono trouxe a evidência. E 3× o dono me out-adversarializou (route-gate carrega sync; §0 mal-aplicada; \"agent-git pode falhar?\").",
+      "qa-critic (modelo isolado) pegou o que o developer (eu) não viu: o drift da própria vitrine, o hedge-rescue, a ordem do carimbo, o fail-closed incompleto. Valor comprovado do QA adversarial isolado."
+    ],
+    "placar": [
+      "Vitrine linkava `PROMPT-CHAT-WEB-v4.3.md` morto + anunciava `v1.22.0` (main v1.41.0)",
+      "Hedge resgatava overclaim (\"pode... nunca alucina\") + 80% de paráfrases escapavam",
+      "`stamp_liveness` depois da saída antecipada (projeto não-git → falso \"inerte\")",
+      "`learnings_public`: map-ausente não-recusado, regex-inválida silenciada, consent não-mecanizado",
+      "`check-repo-sync`/`check-core-agnostic` vetados pelo Kaspersky há ~5 dias, **em silêncio**",
+      "`rm -rf .claude/.hooklive` (meu)",
+      "`test_web_export` travava no Windows (encoding `→`)"
+    ]
+  }
+]

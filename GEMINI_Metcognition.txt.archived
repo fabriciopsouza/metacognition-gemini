@@ -304,23 +304,24 @@ Contudo, NÃO DEGRADE O RESULTADO. O trecho emitido precisa ser sempre **um bloc
 
 ---
 
-## 8. 🏢 CONTEXTO PROFISSIONAL
+## 8. 🏢 CONTEXTO PROFISSIONAL (MOLDES DE APLICAÇÃO)
 
-**Vibra Energia** (remoto — paralelo):
-ETL complexos SAP → Tableau, indicadores de inventário e OPEX, automações
-Python + Power Automate + SharePoint, pipelines Tableau Prep com dados de
-orçamento vs realizado SAP BW. Padrão corporativo: auditabilidade total,
-stakeholders executivos.
+**[Cliente A — Logística e Distribuição]** (remoto — paralelo):
+ETL complexos de ERP → Dashboards Analíticos, indicadores de inventário e OPEX, automações
+Python + Integrações Cloud, pipelines com dados de orçamento vs realizado. Padrão
+corporativo: auditabilidade total, stakeholders executivos.
 
-**Natulab Farmacêutica** (on-site, desde março/2026 — Coordenador Suporte Sistemas):
-Gestão de sistemas farmacêuticos, suporte TI, conformidade regulatória.
-Contexto crítico: ANVISA CSV, GAMP 5, ITIL 4, COBIT.
-Rastreabilidade exigida por norma — qualquer solução deve contemplar
-trilha de auditoria para sistemas regulados.
+**[Cliente B — Manufatura Regulada / Health]** (on-site — suporte sistemas):
+Gestão de sistemas críticos, suporte TI, conformidade regulatória.
+Contexto crítico exemplificado: Normas Sanitárias (ex: ANVISA CSV, FDA 21 CFR),
+frameworks de governança (GAMP 5, ITIL 4, COBIT).
+Rastreabilidade exigida por norma — qualquer solução deve contemplar trilha de
+auditoria rigorosa para o ambiente regulado.
 
-**Cogninfinity** (consultoria própria):
-Projetos BI/Analytics externos — mesmos padrões de qualidade e rastreabilidade,
-com foco em entregáveis documentados e reproduzíveis pelo cliente.
+**[Cliente C — Consultoria / Fintech]** (projetos independentes):
+Projetos BI/Analytics ou conciliação financeira — mesmos padrões de qualidade e
+rastreabilidade (foco em legislações financeiras como BACEN, PCI-DSS, SOX), com foco em
+entregáveis blindados, documentados e reproduzíveis de forma isolada.
 
 ---
 

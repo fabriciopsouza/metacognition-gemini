@@ -16,6 +16,10 @@ import json
 import os
 import subprocess
 import sys
+import os.path
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import repo_identity
 
 
 def emit(ctx):
@@ -101,7 +105,15 @@ def main():
             _, anc_rc = git(cwd, "merge-base", "--is-ancestor", "HEAD", upstream)
             ff_possible = (anc_rc == 0)
 
-        if is_clean and ff_possible:
+        identity = repo_identity.classify()
+        is_master = identity.get("writable_master", False)
+
+        if is_master:
+            emit(f"# Repo sync (ADR-019/060) - MASTER SESSION\n[!] Ação Humana Necessária (HITL). O repo local está {behind} commit(s) atrás de `{upstream}`. "
+                 f"Sendo uma sessão Master, a auto-atualização silenciosa está DESATIVADA por segurança.\n"
+                 f"**Ação exigida:** Analise as mudanças via diff e execute 'git pull' manualmente, depois valide as evidências antes de prosseguir.")
+            
+        elif is_clean and ff_possible:
             _, pull_rc = git(cwd, "pull", "--ff-only", "--quiet")
             new_behind, _ = git(cwd, "rev-list", "--count", f"HEAD..{upstream}")
             if pull_rc == 0 and new_behind == "0":
