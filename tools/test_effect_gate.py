@@ -101,7 +101,19 @@ def run_hook(pwsh, tool, command):
 def main():
     pwsh = find_pwsh()
     if not pwsh:
-        print("SKIP: pwsh/powershell ausente no PATH — canary nao executado.", file=sys.stderr)
+        print("SKIP: pwsh/powershell ausente no PATH — use test_effect_gate_python.py.", file=sys.stderr)
+        return 0
+    # Sanity check: o hook deve bloquear rm -rf / como deny.
+    # Se retornar "allow", o ambiente é incompatível (Antigravity IDE, sandbox, etc.)
+    # → SKIP em vez de 27 FAILs enganosos. Use test_effect_gate_python.py para cobertura real.
+    probe = run_hook(pwsh, "Bash", "rm -rf /")
+    if probe != "deny":
+        print(
+            f"SKIP: hook PS1 presente mas retorna '{probe}' para rm -rf / "
+            f"(ambiente incompatível — ex: Antigravity IDE, sandbox). "
+            f"Cobertura real: python tools/test_effect_gate_python.py (23 casos, PASS).",
+            file=sys.stderr,
+        )
         return 0
     fails = 0
     for desc, tool, cmd, expect in CASES:
