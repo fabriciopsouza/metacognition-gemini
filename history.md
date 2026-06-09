@@ -9,6 +9,11 @@
 
 ---
 
+## [2026-06-09] Correção arquitetural cross-IA — ENCERRADO
+Commits: a5d4283 61cc6ca 79ae33e dbf30dd f5ed6bc
+QA: REPROVADO_REWIND_J4 → fixes → APROVADO_LIMPO [confirmar]
+PR: [URL] — merged
+
 ## 2026-06-08 — Correção SAP FEFO/FIFO (ATD-36246) - Sessão 3 (Developer + QA-Critic + DocOps)
 
 Aprovado e funcionando: O bug de over-allocation do SAP EWM (ZRWM0028_MOVIMENTACAO_DEPOSITO) foi completamente corrigido. Na Sessão 3, atuando no SAP (exceção à regra de framework-only dev), o QA-Critic adversarial encontrou uma falha (C3: reinício de loop em lotes zerados gerando lixo na BAPI). Disparou REWIND. Atuando como Developer, aplicou-se patch `CONTINUE` para lotes <= 0. Novo QA: PASS (C1-C10 limpos, zero over-allocation, zero vazamento de estoque). 
@@ -584,3 +589,7 @@ Riscos ativos: nenhum bloqueante. Risco residual ADR-010 §Riscos (detector de v
 - qa-critic adversarial isolado/heterogêneo — salva-vidas — S — sem-disparo:0 (pegou false-PASS real em O0, O1, O2, O3; em v1.21.0 pegou ALTO template↔hook que 3 testes verdes do gerador escondiam)
 - contrato mínimo (validate_skills) — operacional — S — sem-disparo:0 (gate 7/7 em cada onda)
 - file-first — salva-vidas — S — sem-disparo:0 (violado no bootstrap → ver Aprendizado 2026-05-30)
+
+
+## Aprendizado
+- **Method-audit (2026-06-09)**: Falha de postura - linguagem de marketing e sicofância detectada pelo dono durante o encerramento da entrega do orchestrator. (Causa-raiz): A regra anti-sicofância existia em ADR mas carecia de mecanismo determinístico na saída de texto. **Correção Aplicada**: Nova Regra .agent/rules/05-anti-sycophancy.md, adição de linter 	ools/hooks/check_sycophancy.py e padronização (Regra 10) no qa-critic para checar vocabulário de auto-venda.
