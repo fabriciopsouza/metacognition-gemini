@@ -593,3 +593,23 @@ Riscos ativos: nenhum bloqueante. Risco residual ADR-010 §Riscos (detector de v
 
 ## Aprendizado
 - **Method-audit (2026-06-09)**: Falha de postura - linguagem de marketing e sicofância detectada pelo dono durante o encerramento da entrega do orchestrator. (Causa-raiz): A regra anti-sicofância existia em ADR mas carecia de mecanismo determinístico na saída de texto. **Correção Aplicada**: Nova Regra .agent/rules/05-anti-sycophancy.md, adição de linter 	ools/hooks/check_sycophancy.py e padronização (Regra 10) no qa-critic para checar vocabulário de auto-venda.
+
+
+---
+
+## 2026-06-09 — Correcao Arquitetural Cross-IA (Claude->Gemini) — ENCERRADO
+
+Diagnostico: 2 incidentes reincidentes (monolith QA + cross-domain contamination). Intervencao feita pelo Claude Sonnet 4.6 via protocolo Option A+ (ADR-069). 5 commits no main:
+
+- a5d4283: 3 correcoes estruturais — GEMINI_Metcognition.txt arquivado (P12 + dupla autoridade); ADR-076 revogado->ADR-011; sync-path rule 02 corrigido.
+- 61cc6ca: passos 4-9 — start-session step 0.3 (gates Python inline); session_orchestrator.py (identidade + ADR-018 + anti-sycophancy); effect_gate.py (novo); check_core_agnostic.py (GEMINI*.md + PROMPT*.md).
+- 79ae33e: fix pos-QA — context_budget_gate ref corrigida; test_effect_gate_python.py (23 casos PASS).
+- dbf30dd: docs sessao — docs/_private/sessions/session-2026-06-09-gemini-arch-fix.md.
+- f5ed6bc: rewind-J4 fixes — test_effect_gate.py sanity-check SKIP; ADR-0002 emenda formal ADR-007.
+
+QA cross-IA: Gemini 3.1 Pro (Low). R1 REPROVADO_REWIND_J4 (2 itens bloqueantes). R2 APROVADO_LIMPO apos fixes. Validacao: test_effect_gate_python.py 23 PASS; check_core_agnostic.py PASS; test_sycophancy.py PASS; test_effect_gate.py (PS1) SKIP honesto. Push direto em main; sem feature branch.
+
+Gaps documentados nao-bloqueantes: (1) loop intra-juncao sem limiar numerico; (2) glob scope limitado GEMINI*/PROMPT*; (3) context_budget.py dead code; (4) session_orchestrator.py sem historico git previo.
+
+Nomenclaturas: effect_gate.py (interprete Python ADR-039) | test_effect_gate_python.py (canario Python-nativo).
+WIP: gaps abertos em docs/_private/sessions/ — nao bloqueiam operacao.
