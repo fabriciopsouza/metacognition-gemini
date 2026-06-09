@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.env
+01_Logs/*.log
+02_Dados_Entrada/*
+03_Dados_Processados/*
+04_Dados_Integrados/*
+!01_Logs/.gitkeep
+!02_Dados_Entrada/.gitkeep
+!03_Dados_Processados/.gitkeep
+!04_Dados_Integrados/.gitkeep
